@@ -1,13 +1,39 @@
 import './App.css';
-
+import data from "./data.json";
+import React from "react";
+import Products from "./components/products.js";
 //test change to github.com/
 //feature 1
-function App() {
-  return (
-    <div>
-      <h1>hello</h1>
-    </div>
-  );
-}
+class App extends React.Component {
+  constructor(){
+    super();
+    this.state = {
+      products: data.products,
+      size: "",
+      sort: "",
+    };
+  }
+
+  render() {
+      return (
+      <div className="grid-container">
+        <header>
+          <a href="/">React Shopping Cart</a>
+        </header>
+        <main>
+          <div className = "content">
+              <div className="main"> 
+                <Products products={this.state.products} />
+              </div>
+              <div className="sidebar"> 
+                cart items
+              </div>              
+          </div>
+        </main>
+        <footer>all rights reserved</footer>
+      </div>
+    );
+  };
+};
 
 export default App;
