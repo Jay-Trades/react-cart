@@ -3,6 +3,8 @@ import data from "./data.json";
 import React from "react";
 import Products from "./components/products";
 import Filter from "./components/filter";
+import Cart from "./components/cart";
+
 
 //test change to github.com/
 //feature 1
@@ -13,9 +15,34 @@ class App extends React.Component {
       products: data.products,
       size: "",
       sort: "",
+      cartItems: []
     };
   }
 
+  removeFromCart = (product) => {
+    console.log("inside remove cart")
+    let cartItems = this.state.cartItems.slice();
+    cartItems = cartItems.filter(item => {    //() after arrow means automatic return usually 1 line but {} means u have to specify "return"
+      return item._id !== product._id
+    })    
+    this.setState({cartItems})
+  };
+
+  addToCart = (product) => {
+    console.log("inside remove cart")
+    const cartItems = this.state.cartItems.slice();
+    let alreadyInCart = false;
+    cartItems.forEach(item => {
+      if(item._id === product._id){
+        item.count++;
+        alreadyInCart = true;
+      }
+    });
+    if(!alreadyInCart){
+      cartItems.push({...product, count: 1});
+    }
+    this.setState({cartItems})  //you can just call cartItems single here i guess cause its the same name
+  }
   filterProducts = (event) => {
     console.log(event.target.value);
     if(event.target.value === ""){
@@ -54,10 +81,10 @@ class App extends React.Component {
                   sortProducts={this.sortProducts}
                 />
 
-                <Products products={this.state.products} />
+                <Products products={this.state.products} addToCart={this.addToCart}/>
               </div>
               <div className="sidebar"> 
-                cart items
+                <Cart cartItems={this.state.cartItems} removeFromCart={this.removeFromCart}/>
               </div>              
           </div>
         </main>
