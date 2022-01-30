@@ -15,8 +15,12 @@ class App extends React.Component {
       products: data.products,
       size: "",
       sort: "",
-      cartItems: []
+      cartItems: localStorage.getItem("cartItems") !== 'undefined' ? JSON.parse(localStorage.getItem("cartItems")) : []
     };
+  }
+  createOrder = (order) => {
+    console.log(order.name);
+    alert("need to save order for" + order.name);
   }
 
   removeFromCart = (product) => {
@@ -26,6 +30,8 @@ class App extends React.Component {
       return item._id !== product._id
     })    
     this.setState({cartItems})
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
   };
 
   addToCart = (product) => {
@@ -42,6 +48,7 @@ class App extends React.Component {
       cartItems.push({...product, count: 1});
     }
     this.setState({cartItems})  //you can just call cartItems single here i guess cause its the same name
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }
   filterProducts = (event) => {
     console.log(event.target.value);
@@ -84,7 +91,7 @@ class App extends React.Component {
                 <Products products={this.state.products} addToCart={this.addToCart}/>
               </div>
               <div className="sidebar"> 
-                <Cart cartItems={this.state.cartItems} removeFromCart={this.removeFromCart}/>
+                <Cart cartItems={this.state.cartItems} removeFromCart={this.removeFromCart} createOrder={this.createOrder}/>
               </div>              
           </div>
         </main>
